@@ -80,7 +80,7 @@ for digital image correlation"""
           self.disp = disp
 
      def add_meta_info(self, meta_info):
-          """Save the related meta info to the current grid object"""
+          """Save the related meta info into the current grid object"""
           self.meta_info = meta_info
 
      def prepare_saved_file(self, prefix, extension):
@@ -110,7 +110,7 @@ for digital image correlation"""
           draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,0,0), filename=name)
 
      def write_result(self):
-          """write raw csv result file. You can use your favorite tool to post-treat this file"""
+          """write a raw csv result file. Indeed, you can use your favorite tool to post-treat this file"""
           name = self.prepare_saved_file('result', 'dat')
           f = open(name, 'w')
           f.write("index" + '\t' + "index_x" + '\t' + "index_y" + '\t' + "pos_x"    + '\t' + "pos_y"    + '\t' + 
@@ -129,13 +129,13 @@ for digital image correlation"""
 
 
      def plot_field(self, field, title):
-          """Plot the choosen field such as strain_xx, disp_xx, etc. in a matplotlib interactive map"""
+          """Plot the chosen field such as strain_xx, disp_xx, etc. in a matplotlib interactive map"""
           image_ref = cv2.imread(self.image, 0)
           Plot(image_ref, self, field, title)
           
      def interpolate_displacement(self, point, disp, *args, **kwargs):
-          """Interpolate the displacement. It allows to (i)construct the displacement grid and to 
-(ii) smooth the displacement field thanks to the choosen method (raw, linear, spline,etc.)"""
+          """Interpolate the displacement field. It allows to (i) construct the displacement grid and to 
+(ii) smooth the displacement field thanks to the chosen method (raw, linear, spline,etc.)"""
 
           x = np.array([p[0] for p in point])
           y = np.array([p[1] for p in point])
@@ -181,7 +181,7 @@ for digital image correlation"""
 
 
      def compute_strain_field(self):
-          """Compute strain field from displacement field thanks to numpy"""
+          """Compute strain field from displacement thanks to numpy"""
           #get strain fields
           dx = self.grid_x[1][0] - self.grid_x[0][0]
           dy = self.grid_y[0][1] - self.grid_y[0][0]
@@ -196,7 +196,7 @@ for digital image correlation"""
           
           
      def compute_strain_field_DA(self):
-          """Compute strain field from displacement field thanks to custom method for large strain"""
+          """Compute strain field from displacement field thanks to a custom method for large strain"""
           self.strain_xx = self.disp_x.copy(); self.strain_xx.fill(np.NAN)
           self.strain_xy = self.disp_x.copy(); self.strain_xy.fill(np.NAN)
           self.strain_yy = self.disp_x.copy(); self.strain_yy.fill(np.NAN)
@@ -337,8 +337,8 @@ sequence of images. The displacements are computed and a result file is written
  - the third arg 'grid_size_px' is the size of your correlation grid
  - the fourth arg 'result_file' locates your result file 
  - the last optional argument gives the area of interset in (size_x,size_y) format. 
-   if you don't give this argument, a windows with the firts image is displayed 
-   where you can pick manually your area of intersest (left click and move the mouse to choose it)."""
+   if you don't give this argument, a windows with the first image is displayed. 
+   You can pick in this picture manually your area of intersest."""
 
      
      img_list = sorted(glob.glob(image_pattern))
@@ -395,29 +395,30 @@ sequence of images. The displacements are computed and a result file is written
 def read_dic_file(result_file, *args, **kwargs):
      """the read_dic_file is a simple wrapper function that allows to parse a dic 
 file (given by the init() function) and compute the strain fields. The displacement fields 
-can be smoothed thanks to many interpolation method. A good interpolation method to do this 
-is the 'spline' method. Note that a new folder 'pydic' is created in the image directory where
- different results files are written. 
+can be smoothed thanks to many interpolation methods. A good interpolation method to do this 
+job is the 'spline' method. After this process, note that a new folder named 'pydic' is 
+created into the image directory where different results files are written. 
 
 These results are :
-- 'disp' that contains images where the displacement of correlation windows are highlighted. You 
+- 'disp' that contains images where the displacement of the correlation windows are highlighted. You 
   can apply a scale to amplify these displacements.
 - 'grid' that contains images where the correlation grid is highlighted. You 
   can apply a scale to amplify the strain of this grid.
 - 'marker' that contains images  where the displacement of corraleted markers are highlighted
-- 'result' where you can find raw text file (csv format) that constain the computed displacements
-  and strain field of each correlation windows
+- 'result' where you can find raw text file (csv format) that constain the computed displacement
+  and strain fields of each picture.
 
 * required argument:
   - the first arg 'result_file' must be a result file given by the init() function
 * optional named arguments ;
  - 'interpolation' the allowed vals are 'raw', 'spline', 'linear', 'delaunnay', 'cubic', etc... 
-   a good val is 'raw' (for no interpolation) or spline that smooth your data.
- - 'save_image ' is True or False. Here you can choose if you want to save the 'disp', 'grid' and 'marker' 
-   result images
- - 'save_image_scale' is the scale (a float) that allow to amplify the displacement of the 'disp' and 'grid' images
- - 'meta_info_file' is the path to a meta info file. A meta info file is a simple csv file that contains some 
-   additional info on images such as time or load values reached when the picture was taken.
+   a good value is 'raw' (for no interpolation) or spline that smooth your data.
+ - 'save_image ' is True or False. Here you can choose if you want to save the 'disp', 'grid' and 
+   'marker' result images
+ - 'save_image_scale' is the scale (a float) that allows to amplify the displacement of the '
+   disp' and 'grid' images
+ - 'meta_info_file' is the path to a meta info file. A meta info file is a simple csv file 
+   that contains some additional data for each pictures such as time or load values.
 """
      # treat optional args
      interpolation    = 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
