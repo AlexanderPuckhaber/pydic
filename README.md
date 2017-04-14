@@ -36,4 +36,4 @@ shows how to use *pydic* for :
  * the `result` folder contains [csv](https://en.wikipedia.org/wiki/Comma-separated_values) result files.
  
 
-![](https://gitlab.com/damien.andre/pydic/raw/master/doc/disp.gif =250x)
+<img src="https://gitlab.com/damien.andre/pydic/raw/master/doc/disp.gif" alt="Drawing" style="width: 200px;"/>
