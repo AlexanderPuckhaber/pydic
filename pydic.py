@@ -369,6 +369,8 @@ sequence of images. The displacements are computed and a result file is written
 
      # ok, display
      points_in = remove_point_outside(points, area, shape='box')
+     img_ref = cv2.imread(img_list[0], 0)
+     cv2.putText(img_ref, "Displaying markers... Press any buttons to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
      draw_opencv(img_ref, point=points_in)
 
      # compute grid and save it in result file

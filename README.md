@@ -70,4 +70,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 [GNU General Public License for more details](http://www.gnu.org/licenses/).
 
 # Contact
-`damien.andre@unilim.fr`
+Feel free to contact me at `damien.andre@unilim.fr`
