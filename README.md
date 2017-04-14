@@ -25,7 +25,7 @@ and [scipy](https://www.scipy.org/) are embedded in the main python packages
 such as [python(x,y)](https://python-xy.github.io/) or GNU/Linux distributions. 
 
 The [opencv2](http://opencv.org/) library is a powerful library for image processing with python bindings. 
-The DIC processing stuffs are managed by this library. Probably, you need to compile manually 
+The DIC processings are managed by this library. Probably, you need to compile manually 
 the [opencv2](http://opencv.org/) library. The installation and compilation procedure of opencv2 is 
 detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.4/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction). Once you have done this work, you can 
 download the *pydic* package and go to the `examples` directory to run the *tensile test* or the *four point bending test* examples.
@@ -35,8 +35,7 @@ download the *pydic* package and go to the `examples` directory to run the *tens
 Go to the `examples/4-pt-bending-test` and simply run with python the `main.py` file. This `main.py` file 
 shows how to use *pydic* for :
 1. read the picture series and run the DIC with the `pydic.init()` method. This method ends by writing a separated result file `*.dic`.
-1. read the `*.dic` and compute (and eventually smooth) displacement and strain fields with `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
-2. open an image list, compute the displacement for each image and write the results in a `*.dic` file with the `pydic.init()` method
+2. read the `*.dic` and compute (and eventually smooth) the displacement and strain fields with the `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
  * the `disp` folder contains pictures that paint the displacement field
  * the `grid` folder contains pictures that paint the displacement grid
  * the `marker` folder contains pictures the displacement of the correlated windows
