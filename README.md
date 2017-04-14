@@ -2,9 +2,11 @@
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/main-figure.png)
 
 
-*pydic* is a free and easy-to-use python tool for digital image correlation (DIC). *pydic* is not a 
-graphical application , pydic is a python module named `pydic.py` deliver with a set of 
-didactic examples. From a set of pictures, *pydic* can compute the displacement and the strain fields 
+*pydic* is a free and easy-to-use python tool for digital image correlation (DIC). Note that *pydic* is not a 
+graphical application. *pydic* is a python module, named `pydic.py`, deliver with 
+didactic examples that may be used as tutorials. 
+
+From a set of pictures, *pydic* can compute the displacement and the strain fields 
 inside a zone of interest. If you want to learn more about digital image correlation,
 you can visit the [wikipedia page](https://en.wikipedia.org/wiki/Digital_image_correlation).
 Note that the method used here is said as *local* digital image correlation. The main problem
