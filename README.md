@@ -9,4 +9,4 @@ to install them before running pydic.
 After these installation you can go to the examples directory to
 get a quick overview of the pydic features.
 
-
+[I link to the Milestones page](./doc/README.md)
