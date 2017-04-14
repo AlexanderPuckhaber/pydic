@@ -107,7 +107,7 @@ for digital image correlation"""
      def draw_grid_img(self, scale):
           """Draw grid image. A scale value can be passed to amplify the displacement field"""
           name = self.prepare_saved_file('grid', 'png')
-          draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,255,0), filename=name, text=name)
+          draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,255,250), filename=name, text=name)
 
      def write_result(self):
           """write a raw csv result file. Indeed, you can use your favorite tool to post-treat this file"""
@@ -319,7 +319,7 @@ def draw_opencv(image, *args, **kwargs):
                                not math.isnan(gr.disp_y[i,j+1])):
                                 x1 = int(gr.grid_x[i,j+1]) + int(gr.disp_x[i,j+1]*scale)
                                 y1 = int(gr.grid_y[i,j+1]) + int(gr.disp_y[i,j+1]*scale)
-                                frame = cv2.line(frame, (x, y), (x1, y1), gr_color, 1)
+                                frame = cv2.line(frame, (x, y), (x1, y1), gr_color, 4)
     if 'filename' in kwargs:
          cv2.imwrite( kwargs['filename'], frame)
          return
