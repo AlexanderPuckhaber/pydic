@@ -336,7 +336,7 @@ def write_result(result_file, image, points):
           result_file.write(str(p[0]) + ',' + str(p[1]) + '\t')
      result_file.write('\n')
     
-def init(image_pattern, win_size_px, grid_size_px, result_file, area_of_intersest=None):
+def init(image_pattern, win_size_px, grid_size_px, result_file, area_of_intersest=None, *args, **kwargs):
      """the init function is a simple wrapper function that allows to parse a 
 sequence of images. The displacements are computed and a result file is written
  - the first arg 'image_pattern' is the path where your image are located 
@@ -360,12 +360,25 @@ sequence of images. The displacements are computed and a result file is written
      # init correlation grid
      area     = area_of_intersest
      points   = []
-     points_x = np.float64(np.arange(area[0][0], area[1][0], grid_size_px[0]))
-     points_y = np.float64(np.arange(area[0][1], area[1][1], grid_size_px[1]))
-     for x in points_x:
-          for y in points_y:
-               points.append(np.array([np.float32(x),np.float32(y)]))
-     points = np.array(points)
+
+     if not 'unstructured_grid' in kwargs: 
+          points_x = np.float64(np.arange(area[0][0], area[1][0], grid_size_px[0]))
+          points_y = np.float64(np.arange(area[0][1], area[1][1], grid_size_px[1]))
+          for x in points_x:
+               for y in points_y:
+                    points.append(np.array([np.float32(x),np.float32(y)]))
+          points = np.array(points)
+     else:
+          min_dist = 10 if not 'min_dist' in kwargs else float(kwargs['scale_grid'])
+          feature_params = dict( maxCorners = 50000,
+                                 qualityLevel = 0.01,
+                                 minDistance = 5,
+                                 blockSize = BLOCK)
+
+          points    = cv2.goodFeaturesToTrack(image_ref, mask = None, **feature_params)[:,0]
+          points_in = remove_point_outside(points, area)
+          draw_opencv(image_ref, point=points_in)
+
 
      # ok, display
      points_in = remove_point_outside(points, area, shape='box')
@@ -433,7 +446,7 @@ These results are :
      interpolation = 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
      save_image    = True if not 'save_image' in kwargs else kwargs['save_image']
      scale_disp    = 4. if not 'scale_disp' in kwargs else float(kwargs['scale_disp'])
-     scale_grid    = 25. if not ' scale_grid' in kwargs else float(kwargs['scale_grid'])
+     scale_grid    = 25. if not 'scale_grid' in kwargs else float(kwargs['scale_grid'])
 
      # read meta info file
      meta_info = {}

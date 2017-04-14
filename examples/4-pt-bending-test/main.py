@@ -55,6 +55,7 @@ pydic = imp.load_source('pydic', '../../pydic.py')
 #  ====== RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS
 # read image series and write a separated result file 
 pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic")
+pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic", unstructured_grid=True, min_dist=10)
 
 # and read the result file for computing strain and displacement field from the result file 
 pydic.read_dic_file('/tmp/result.dic', interpolation='spline', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
