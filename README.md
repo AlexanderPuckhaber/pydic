@@ -34,8 +34,6 @@ shows how to use *pydic* for :
  * the `grid` folder contains pictures that paint the displacement grid
  * the `marker` folder contains pictures the displacement of the correlated windows
  * the `result` folder contains [csv](https://en.wikipedia.org/wiki/Comma-separated_values) result files.
- 
 
-![](https://gitlab.com/damien.andre/pydic/raw/master/doc/disp.gif)
+The following animated gif show the results of a series of grid images where the displacement is scaled by 400%
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/grid.gif)
-![](https://gitlab.com/damien.andre/pydic/raw/master/doc/marker.gif)
