@@ -1,5 +1,5 @@
 # pydic, a python suite for digital image correlation
-![](https://gitlab.com/damien.andre/pydic/raw/4ff6d5b121cb333fca1f6726310c48cf824fda1b/doc/logo.png)
+![](https://gitlab.com/damien.andre/pydic/raw/master/doc/main-figure.png)
 
 
 *pydic* is a free and easy-to-use python tool for digital image correlation (DIC). *pydic* is not a 
