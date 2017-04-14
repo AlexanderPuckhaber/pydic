@@ -25,22 +25,22 @@ detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.
 download the *pydic* package and go to the `examples` directory to run the *tensile test* or the *four point bending test* examples.
 
 
-# Running example
+# Running the four point bending test example
 Go to the `examples/4-pt-bending-test` and simply run with python the `main.py` file. This `main.py` file 
 shows how to use *pydic* for :
-1. open an image list, compute the displacement for each image and write the results in a `*.dic` file with the `pydic.init()` method
 2. read the `*.dic` and compute (and eventually smooth) displacement and strain fields with `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
+1. open an image list, compute the displacement for each image and write the results in a `*.dic` file with the `pydic.init()` method
  * the `disp` folder contains pictures that paint the displacement field
  * the `grid` folder contains pictures that paint the displacement grid
  * the `marker` folder contains pictures the displacement of the correlated windows
  * the `result` folder contains [csv](https://en.wikipedia.org/wiki/Comma-separated_values) result files. These files 
  can be used to post-treat the results with your favorite tool such as spreadsheet softwares.
  
-The following animated gif show the results of a series of `disp` images where the displacement are painted by red lines 
+The following animated gif shows the results of a series of `disp` images where the displacement are painted by red lines 
 and scaled by a 10x factor. 
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/disp.gif)
 
-The following animated gif show the results of a series of `grid` images where the grid strain is scaled by a 25x factor. 
+The following animated gif shows the results of a series of `grid` images where the grid strain is scaled by a 25x factor. 
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/grid.gif)
 
 Finally, the following animated gif shows the displacement of markers that correspond to the center of correlation windows.
