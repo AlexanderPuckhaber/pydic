@@ -36,15 +36,14 @@ Go to the `examples/4-pt-bending-test` and simply run with python the `main.py` 
 shows how to use *pydic* for :
 1. read the picture series and run the DIC with the `pydic.init()` method. This method ends by writing a separated result file `*.dic`.
 2. read the `*.dic` and compute (and eventually smooth) the displacement and strain fields with the `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
- * the `disp` folder contains pictures that paint the displacement field
- * the `grid` folder contains pictures that paint the displacement grid
- * the `marker` folder contains pictures the displacement of the correlated windows
+ * the `disp` folder contains pictures that paint the displacement fields
+ * the `grid` folder contains pictures that paint the displacement grids
+ * the `marker` folder contains pictures that paint the displacement of the correlated windows
  * the `result` folder contains [csv](https://en.wikipedia.org/wiki/Comma-separated_values) result files. These files 
- can be used to post-treat the results with your favorite tool such as spreadsheet softwares. #You can go at the bottom of this 
- to get an overview of these images.#
- 3. plotting strain field interactive maps thanks to matplotlib
- 4. using meta-data file to store sensor data for each picture such as the loading force
- 5. using the power of the python language to make complex post-treatment such as automatically computing the Young's modulus from 
+ can be used to post-treat the results given by the DIC with your favorite tool such as spreadsheet software. 
+3. plotting strain field interactive maps thanks to matplotlib
+4. using meta-data file to store sensor data for each picture such as the loading force
+5. using the power of the python language to make complex post-treatment such as automatically computing the Young's modulus from 
  strain fields and meta-data.K information.
  
 # Quick overview of result image files : *disp*, *grid* and *marker* files
