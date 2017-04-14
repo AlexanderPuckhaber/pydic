@@ -28,14 +28,20 @@ download the *pydic* package and go to the `examples` directory to run the *tens
 # Running the four point bending test example
 Go to the `examples/4-pt-bending-test` and simply run with python the `main.py` file. This `main.py` file 
 shows how to use *pydic* for :
-2. read the `*.dic` and compute (and eventually smooth) displacement and strain fields with `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
-1. open an image list, compute the displacement for each image and write the results in a `*.dic` file with the `pydic.init()` method
+1. read the `*.dic` and compute (and eventually smooth) displacement and strain fields with `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
+2. open an image list, compute the displacement for each image and write the results in a `*.dic` file with the `pydic.init()` method
  * the `disp` folder contains pictures that paint the displacement field
  * the `grid` folder contains pictures that paint the displacement grid
  * the `marker` folder contains pictures the displacement of the correlated windows
  * the `result` folder contains [csv](https://en.wikipedia.org/wiki/Comma-separated_values) result files. These files 
- can be used to post-treat the results with your favorite tool such as spreadsheet softwares.
+ can be used to post-treat the results with your favorite tool such as spreadsheet softwares. #You can go at the bottom of this 
+ to get an overview of these images.#
+ 3. plotting strain field interactive maps thanks to matplotlib
+ 4. using meta-data file to store sensor data for each picture such as the loading force
+ 5. using the power of the python language to make complex post-treatment such as automatically computing the Young's modulus from 
+ strain fields and meta-data.K information.
  
+# Quick overview of result image files : *disp*, *grid* and *marker* files
 The following animated gif shows the results of a series of `disp` images where the displacement are painted by red lines 
 and scaled by a 10x factor. 
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/disp.gif)
@@ -45,3 +51,8 @@ The following animated gif shows the results of a series of `grid` images where 
 
 Finally, the following animated gif shows the displacement of markers that correspond to the center of correlation windows.
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/marker.gif)
+
+In addition, the *four point bending test example* shows how to :
+ * plot strain field interactive map
+ * use meta-data file that can store meta-information for each picture 
+ * benefits of the power of the python language to make complex post-treatment such as automatically computing the Young's modulus from the computed strain field and the meta-data information.
