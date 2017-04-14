@@ -3,7 +3,7 @@
 
 
 *pydic* is a free and easy-to-use python tool for digital image correlation (DIC). Note that *pydic* is not a 
-graphical application. *pydic* is a python module, named `pydic.py`, deliver with 
+graphical application. *pydic* is a python module, named `pydic.py`, delivered with 
 didactic examples that may be used as tutorials. 
 
 From a set of pictures, *pydic* can compute the displacement and the strain fields 
@@ -22,7 +22,8 @@ image correlation and let automatic choosing best points for DIC thanks to algor
 [scipy](https://www.scipy.org/) and [opencv2](http://opencv.org/). You have to install
 these libraries to use *pydic*. Generally, [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
 and [scipy](https://www.scipy.org/) are embedded in the main python packages 
-such as [python(x,y)](https://python-xy.github.io/) or GNU/Linux distributions. 
+such as [python(x,y)](https://python-xy.github.io/) or available in the standard package 
+repositories of the main GNU/Linux distributions. 
 
 The [opencv2](http://opencv.org/) library is a powerful library for image processing with python bindings. 
 The DIC processings are managed by this library. Probably, you need to compile manually 
@@ -34,8 +35,8 @@ download the *pydic* package and go to the `examples` directory to run the *tens
 # Running the four point bending test example
 Go to the `examples/4-pt-bending-test` and simply run with python the `main.py` file. This `main.py` file 
 shows how to use *pydic* for :
-1. reading the picture series and run the DIC with the `pydic.init()` method. This method ends by writing a separated result file `*.dic`.
-2. reading the `*.dic` and compute (and eventually smooth) the displacement and strain fields with the `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
+1. reading a picture series and run the DIC with the `pydic.init()` method. This method ends by writing a separated result file `*.dic`.
+2. reading the `*.dic` file and compute (and eventually smooth) the displacement and strain fields with the `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
  * the `disp` folder contains pictures that paint the displacement fields
  * the `grid` folder contains pictures that paint the displacement grids
  * the `marker` folder contains pictures that paint the displacement of the correlated windows
@@ -54,7 +55,7 @@ and scaled by a 10x factor.
 The following animated gif shows the results of a series of `grid` images where the grid strain is scaled by a 25x factor. 
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/grid.gif)
 
-Finally, the following animated gif shows the displacement of markers that correspond to the center of correlation windows.
+Finally, the following animated gif shows the displacement of *markers*. The *markers* are simply the centers of the correlation windows.
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/marker.gif)
 
 
