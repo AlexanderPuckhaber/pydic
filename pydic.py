@@ -231,7 +231,8 @@ for digital image correlation"""
           val = []
           for x in x_range:
                for y in y_range:
-                    val.append(value[x,y])
+                    if np.isnan(value[x,y]) == False:
+                         val.append(value[x,y])
           return np.average(val)
 
      def std(self, value, x_range, y_range):
@@ -239,7 +240,8 @@ for digital image correlation"""
           val = []
           for x in x_range:
                for y in y_range:
-                    val.append(value[x,y])
+                    if np.isnan(value[x,y]) == False:
+                         val.append(value[x,y])
           return np.std(val)
 
 
@@ -343,9 +345,11 @@ sequence of images. The displacements are computed and a result file is written
  - the second arg 'win_size_px' is the size in pixel of your correlation windows
  - the third arg 'grid_size_px' is the size of your correlation grid
  - the fourth arg 'result_file' locates your result file 
- - the last optional argument gives the area of interset in (size_x,size_y) format. 
+ - the optional argument 'area_of_intersest'gives the area of interset in (size_x,size_y) format. 
    if you don't give this argument, a windows with the first image is displayed. 
-   You can pick in this picture manually your area of intersest."""
+   You can pick in this picture manually your area of intersest.
+ - you can use the named argument 'unstructured_grid=(val1,val2)' to let the 'goodFeaturesToTrack' 
+   opencv2 algorithm. Note that you can't use the 'spline' or the 'raw' interpolation method."""
 
      
      img_list = sorted(glob.glob(image_pattern))
@@ -360,24 +364,21 @@ sequence of images. The displacements are computed and a result file is written
      # init correlation grid
      area     = area_of_intersest
      points   = []
+     points_x = np.float64(np.arange(area[0][0], area[1][0], grid_size_px[0]))
+     points_y = np.float64(np.arange(area[0][1], area[1][1], grid_size_px[1]))
 
      if not 'unstructured_grid' in kwargs: 
-          points_x = np.float64(np.arange(area[0][0], area[1][0], grid_size_px[0]))
-          points_y = np.float64(np.arange(area[0][1], area[1][1], grid_size_px[1]))
           for x in points_x:
                for y in points_y:
                     points.append(np.array([np.float32(x),np.float32(y)]))
           points = np.array(points)
      else:
-          min_dist = 10 if not 'min_dist' in kwargs else float(kwargs['scale_grid'])
+          block_size, min_dist = kwargs['unstructured_grid']
           feature_params = dict( maxCorners = 50000,
                                  qualityLevel = 0.01,
-                                 minDistance = 5,
-                                 blockSize = BLOCK)
-
-          points    = cv2.goodFeaturesToTrack(image_ref, mask = None, **feature_params)[:,0]
-          points_in = remove_point_outside(points, area)
-          draw_opencv(image_ref, point=points_in)
+                                 minDistance = min_dist,
+                                 blockSize = block_size)
+          points = cv2.goodFeaturesToTrack(img_ref, mask = None, **feature_params)[:,0]
 
 
      # ok, display

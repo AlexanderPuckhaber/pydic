@@ -52,22 +52,23 @@ pydic = imp.load_source('pydic', '../../pydic.py')
 
 
 
-#  ====== RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS
+#  ====== RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS (STRUCTURED GRID)
 # read image series and write a separated result file 
 pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic")
-pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic", unstructured_grid=True, min_dist=10)
-
 # and read the result file for computing strain and displacement field from the result file 
 pydic.read_dic_file('/tmp/result.dic', interpolation='spline', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
+
+
+#  ====== OR RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS (WITH UNSTRUCTURED GRID OPTION)
+# note that you can't use the 'spline' or the 'raw' interpolation with unstructured grids 
+# please uncomment the next lines if you want to use the unstructured grid options
+# pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic", unstructured_grid=(20,5))
+# pydic.read_dic_file('/tmp/result.dic', interpolation='cubic', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
+
 
 # Now you can go in the 'img/pydic' directory to see the results :
 # - the 'disp', 'grid' and 'marker' directories contain image files
 # - the 'result' directory contain raw text csv file where displacement and strain fields are written  
-
-
-
-
-
 
 
 
