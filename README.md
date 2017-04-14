@@ -19,20 +19,11 @@ image correlation and let automatic choosing best points for DIC thanks to algor
 # Installation
 *pydic* is based on [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
 [scipy](https://www.scipy.org/) and [opencv2](http://opencv.org/). You have to install
-these libraries to used *pydic*. Generally, [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
+these libraries to use *pydic*. Generally, [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
 and [scipy](https://www.scipy.org/) are embedded in the main python distribution 
 such as [python(x,y)](https://python-xy.github.io/) or GNU/Linux distributions. Probably, you need 
 to compile manually the [opencv2](http://opencv.org/) library. The installation and compilation procedure of opencv2 is 
-detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.4/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction). 
+detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.4/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction). Once you have done this work, you can 
+go to the `examples` directory to run *tensile test* or *four point bending test* examples.
 
 
-*pydic* is an easy-to-use python module for computing strain field maps 
-from a serie of pictures.
-
-*pydic* depends on matplotlib, numpy, scipy and opencv2. You have 
-to install them before running *pydic*. 
-
-After these installation you can go to the examples directory to
-get a quick overview of the *pydic* features.
-
-[I link to the Milestones page](./doc/README.md)
