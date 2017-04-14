@@ -107,7 +107,7 @@ for digital image correlation"""
      def draw_grid_img(self, scale):
           """Draw grid image. A scale value can be passed to amplify the displacement field"""
           name = self.prepare_saved_file('grid', 'png')
-          draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,0,0), filename=name, text=name)
+          draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,255,0), filename=name, text=name)
 
      def write_result(self):
           """write a raw csv result file. Indeed, you can use your favorite tool to post-treat this file"""
