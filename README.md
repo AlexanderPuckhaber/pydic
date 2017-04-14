@@ -18,10 +18,21 @@ image correlation and let automatic choosing best points for DIC thanks to algor
 *pydic* is based on [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
 [scipy](https://www.scipy.org/) and [opencv2](http://opencv.org/). You have to install
 these libraries to use *pydic*. Generally, [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
-and [scipy](https://www.scipy.org/) are embedded in the main python distribution 
+and [scipy](https://www.scipy.org/) are embedded in the main python packages 
 such as [python(x,y)](https://python-xy.github.io/) or GNU/Linux distributions. Probably, you need 
 to compile manually the [opencv2](http://opencv.org/) library. The installation and compilation procedure of opencv2 is 
 detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.4/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction). Once you have done this work, you can 
-go to the `examples` directory to run *tensile test* or *four point bending test* examples.
+download the *pydic* package and go to the `examples` directory to run the *tensile test* or the *four point bending test* examples.
 
+
+# Running example
+Go to the `examples/4-pt-bending-test` and simply run with python the `main.py` file. This `main.py` file 
+shows how to use *pydic* for :
+1. open an image list, compute the displacement for each image and write the results in a `*.dic` file with the `pydic.init()` method
+2. read the `*.dic` and compute (and eventually smooth) displacement and strain fields with `pydic.read_dic_file()` method. This step write a series of results files. These files are located in the `img` folder where :
+ * the `disp` folder contains pictures that paint the displacement field
+ * the `grid` folder contains pictures that paint the displacement grid
+ * the `marker` folder contains pictures the displacement of the correlated windows
+ * the `result` folder contains [csv](https://en.wikipedia.org/wiki/Comma-separated_values) result files.
+ 
 
