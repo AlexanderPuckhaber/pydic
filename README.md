@@ -1,4 +1,4 @@
-# *PYDIC*, a python suite for local digital image correlation
+# **pydic**, a python suite for local digital image correlation
 ![](https://gitlab.com/damien.andre/pydic/raw/master/doc/main-figure.png)
 
 
