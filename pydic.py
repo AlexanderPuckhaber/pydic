@@ -97,17 +97,17 @@ for digital image correlation"""
      def draw_marker_img(self):
           """Draw marker image"""
           name = self.prepare_saved_file('marker', 'png')
-          draw_opencv(self.image, point=self.correlated_point, l_color=(0,0,255), p_color=(255,255,0), filename=name)
+          draw_opencv(self.image, point=self.correlated_point, l_color=(0,0,255), p_color=(255,255,0), filename=name, text=name)
           
      def draw_disp_img(self, scale):
           """Draw displacement image. A scale value can be passed to amplify the displacement field"""
           name = self.prepare_saved_file('disp', 'png')
-          draw_opencv(self.reference_image, point=self.reference_point, pointf=self.correlated_point, l_color=(0,0,255), p_color=(255,255,0), scale=scale, filename=name)
+          draw_opencv(self.reference_image, point=self.reference_point, pointf=self.correlated_point, l_color=(0,0,255), p_color=(255,255,0), scale=scale, filename=name, text=name)
 
      def draw_grid_img(self, scale):
           """Draw grid image. A scale value can be passed to amplify the displacement field"""
           name = self.prepare_saved_file('grid', 'png')
-          draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,0,0), filename=name)
+          draw_opencv(self.reference_image, grid = self, scale=scale, gr_color=(255,0,0), filename=name, text=name)
 
      def write_result(self):
           """write a raw csv result file. Indeed, you can use your favorite tool to post-treat this file"""
@@ -266,6 +266,11 @@ def draw_opencv(image, *args, **kwargs):
     if type(image) == str :
          image = cv2.imread(image, 0)
 
+    if 'text' in kwargs:
+         text = kwargs['text']
+         cv2.putText(image, text, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+
+         
     frame = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
     if  'point' in kwargs:
         p_color = (0, 255, 255) if not 'p_color' in kwargs else kwargs['p_color']
@@ -275,17 +280,19 @@ def draw_opencv(image, *args, **kwargs):
                  y = int(pt[1])
                  frame = cv2.circle(frame, (x, y), 4, p_color, -1)
 
+    scale = 1. if not 'scale' in kwargs else kwargs['scale']
     if 'pointf' in kwargs and 'point' in kwargs:
         assert len(kwargs['point']) == len(kwargs['pointf']), 'bad size'
         l_color = (255, 120, 255) if not 'l_color' in kwargs else kwargs['l_color']
         for i, pt0 in enumerate(kwargs['point']):
             pt1 = kwargs['pointf'][i]
             if np.isnan(pt0[0])==False and np.isnan(pt0[1])==False and np.isnan(pt1[0])==False and np.isnan(pt1[1])==False :
-                 frame = cv2.line(frame, (pt0[0], pt0[1]), (pt1[0], pt1[1]), l_color, 2)
+                 disp_x = (pt1[0]-pt0[0])*scale
+                 disp_y = (pt1[1]-pt0[1])*scale
+                 frame = cv2.line(frame, (pt0[0], pt0[1]), (int(pt0[0]+disp_x), int(pt0[1]+disp_y)), l_color, 2)
 
     if 'grid' in kwargs:
         gr =  kwargs['grid']
-        scale = 1. if not 'scale' in kwargs else kwargs['scale']
         gr_color = (255, 255, 255) if not 'gr_color' in kwargs else kwargs['gr_color']
         for i in range(gr.size_x):
             for j in range(gr.size_y):
@@ -415,15 +422,16 @@ These results are :
    a good value is 'raw' (for no interpolation) or spline that smooth your data.
  - 'save_image ' is True or False. Here you can choose if you want to save the 'disp', 'grid' and 
    'marker' result images
- - 'save_image_scale' is the scale (a float) that allows to amplify the displacement of the '
-   disp' and 'grid' images
+ - 'scale_disp' is the scale (a float) that allows to amplify the displacement of the 'disp' images
+ - 'scale_grid' is the scale (a float) that allows to amplify the 'grid' images
  - 'meta_info_file' is the path to a meta info file. A meta info file is a simple csv file 
    that contains some additional data for each pictures such as time or load values.
 """
      # treat optional args
-     interpolation    = 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
-     save_image       = True if not 'save_image' in kwargs else kwargs['save_image']
-     save_image_scale = 25. if not 'save_image_scale' in kwargs else float(kwargs['save_image_scale'])
+     interpolation = 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
+     save_image    = True if not 'save_image' in kwargs else kwargs['save_image']
+     scale_disp    = 4. if not 'scale_disp' in kwargs else float(kwargs['scale_disp'])
+     scale_grid    = 25. if not ' scale_grid' in kwargs else float(kwargs['scale_grid'])
 
      # read meta info file
      meta_info = {}
@@ -482,8 +490,8 @@ These results are :
           # write image files
           if (save_image):
                mygrid.draw_marker_img()
-               mygrid.draw_disp_img(save_image_scale)
-               mygrid.draw_grid_img(save_image_scale)
+               mygrid.draw_disp_img(scale_disp)
+               mygrid.draw_grid_img(scale_grid)
 
           # write result file
           mygrid.write_result()
@@ -527,8 +535,8 @@ def pick_area_of_interest(image):
             cropping = False
  
             # draw a rectangle around the region of interest
-        cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
-        cv2.imshow("image", image)
+            cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
+            cv2.imshow("image", image)
 
     clone = image.copy()
     cv2.namedWindow("image", cv2.WINDOW_NORMAL)

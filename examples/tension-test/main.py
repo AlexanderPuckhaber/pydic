@@ -57,7 +57,7 @@ pydic = imp.load_source('pydic', '../../pydic.py')
 pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic")
 
 # and read the result file for computing strain and displament field from the result file 
-pydic.read_dic_file('/tmp/result.dic', interpolation='spline', save_image=True, save_image_scale=25, meta_info_file='img/meta-data.txt')
+pydic.read_dic_file('/tmp/result.dic', interpolation='spline', save_image=True, scale_disp=10, scale_grid=10, meta_info_file='img/meta-data.txt')
 
 # Now you can go in the 'img/pydic' directory to see the results :
 # - the 'disp', 'grid' and 'marker' directories contain image files
