@@ -27,7 +27,7 @@ repositories of the main GNU/Linux distributions.
 
 The [opencv2](http://opencv.org/) library is a powerful library for image processing with python bindings. 
 The DIC processings are managed by this library. Probably, you need to compile manually 
-the [opencv2](http://opencv.org/) library. The installation and compilation procedure of opencv2 is 
+the [opencv2](http://opencv.org/) library. The installation and compilation procedure of opencv2 are 
 detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.4/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction). Once you have done this work, you can 
 download the *pydic* package and go to the `examples` directory to run the *tensile test* or the *four point bending test* examples.
 
