@@ -53,19 +53,25 @@ pydic = imp.load_source('pydic', '../../pydic.py')
 
 
 #  ====== RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS (STRUCTURED GRID)
+correl_wind_size = (80,80) # the size in pixel of the correlation windows
+correl_grid_size = (20,20) # the size in pixel of the interval (dx,dy) of the correlation grid
+
+
 # read image series and write a separated result file 
-pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic")
+pydic.init('./img/*.bmp', correl_wind_size, correl_grid_size, "result.dic")
 # and read the result file for computing strain and displacement field from the result file 
-pydic.read_dic_file('/tmp/result.dic', interpolation='spline', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
+pydic.read_dic_file('result.dic', interpolation='spline', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
 
 
 #  ====== OR RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS (WITH UNSTRUCTURED GRID OPTION)
 # note that you can't use the 'spline' or the 'raw' interpolation with unstructured grids 
-# please uncomment the next lines if you want to use the unstructured grid options
-# pydic.init('./img/*.bmp', (80,80), (20,20), "/tmp/result.dic", unstructured_grid=(20,5))
-# pydic.read_dic_file('/tmp/result.dic', interpolation='cubic', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
+# please uncomment the next lines if you want to use the unstructured grid options instead of the aligned grid
+# pydic.init('./img/*.bmp', correl_wind_size, correl_grid_size, "result.dic", unstructured_grid=(20,5))
+# pydic.read_dic_file('result.dic', interpolation='cubic', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
 
 
+
+#  ====== RESULTS
 # Now you can go in the 'img/pydic' directory to see the results :
 # - the 'disp', 'grid' and 'marker' directories contain image files
 # - the 'result' directory contain raw text csv file where displacement and strain fields are written  
@@ -73,7 +79,9 @@ pydic.read_dic_file('/tmp/result.dic', interpolation='spline', save_image=True, 
 
 
 # ======= STANDARD POST-TREATMENT : STRAIN FIELD MAP PLOTTING
-last_grid = pydic.grid_list[-1]
+# the pydic.grid_list is a list that contains all the correlated grids (one per image)
+# the grid objects are the main objects of pydic  
+last_grid = pydic.grid_list[-1]  
 last_grid.plot_field(last_grid.strain_xx, 'xx strain')
 plt.show()
 
@@ -89,10 +97,10 @@ force = np.array([float(x.meta_info['force(N)']) for x in pydic.grid_list])
 
 # compute the maximal normal stress with this force
 # the maximal normal stress is located in the lower plane 
-L = (41-5)*1e-3 # see 'description.png' file 
-l = (19-5)*1e-3 # see 'description.png' file
-b = 7.66e-3    # see 'description.png' file
-h = 4.06e-3    # see 'description.png' file
+L = (41. - 5.)*1e-3 # L is the higher distance between the supports
+l = (19. - 5.)*1e-3 # l is the higher distance between the supports
+b = 7.66e-3    # b is the sample width
+h = 4.06e-3    # h is the sample thickness
 max_stress = (3./2.)* force *(L-l)/(b*h**2)
 
 
@@ -107,7 +115,8 @@ max_strain_xx = np.array([grid.average(grid.strain_xx, x_range, y_range) for gri
 E, intercept, r_value, p_value, std_err = stats.linregress(max_strain_xx, max_stress)
 
 # and print results !
-print "=> Young's modulus is E={:.2f} GPa".format(E*1e-9)
+print "\nThe computed elastic constants is :" 
+print "  => Young's modulus E={:.2f} GPa".format(E*1e-9)
 
 
 # enjoy !

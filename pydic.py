@@ -495,7 +495,7 @@ These results are :
                
      # compute displacement and strain
      for i, mygrid in enumerate(grid_list):
-          print "compute displacement and strain field of", image_list[i], "..."
+          print "\ncompute displacement and strain field of", image_list[i], "..."
           disp = compute_disp_and_remove_rigid_transform(point_list[i], point_list[0])
           mygrid.add_raw_data(win_size, image_list[0], image_list[i], point_list[0], point_list[i], disp)
           
