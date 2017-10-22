@@ -83,6 +83,9 @@ pydic.read_dic_file('result.dic', interpolation='spline', save_image=True, scale
 # the grid objects are the main objects of pydic  
 last_grid = pydic.grid_list[-1]  
 last_grid.plot_field(last_grid.strain_xx, 'xx strain')
+last_grid.plot_field(last_grid.strain_yy, 'yy strain')
+last_grid.plot_field(last_grid.strain_xy, 'xy strain')
+
 plt.show()
 
 

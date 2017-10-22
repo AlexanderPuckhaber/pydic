@@ -104,6 +104,52 @@ for digital image correlation"""
           name = self.prepare_saved_file('disp', 'png')
           draw_opencv(self.reference_image, point=self.reference_point, pointf=self.correlated_point, l_color=(0,0,255), p_color=(255,255,0), scale=scale, filename=name, text=name)
 
+
+                    
+     def draw_disp_hsv_img(self, *args, **kwargs):
+          """Draw displacement image in a hsv view."""
+          name = self.prepare_saved_file('disp_hsv', 'png')
+          img = self.reference_image
+          if type(img) == str :
+               img = cv2.imread(img, 0)
+          
+
+          disp = self.correlated_point - self.reference_point          
+          fx, fy = disp[:,0], disp[:,1]
+          v_all = np.sqrt(fx*fx + fy*fy)
+          v_max = np.mean(v_all) + 2.*np.std(v_all)
+
+          
+          rgb = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+          hsv = cv2.cvtColor(rgb, cv2.COLOR_BGR2HSV)
+
+          if v_max != 0.:
+               for i, val in enumerate(self.reference_point):
+                    disp = self.correlated_point[i] - val
+                    ang = np.arctan2(disp[1], disp[0]) + np.pi
+                    v = np.sqrt(disp[0]**2 + disp[1]**2)
+                    pt_x = int(val[0])
+                    pt_y = int(val[1])
+
+                    hsv[pt_y,pt_x, 0] = int(ang*(180/np.pi/2))
+                    hsv[pt_y,pt_x, 1] = 255 if int((v/v_max)*255.) > 255 else int((v/v_max)*255.)
+                    hsv[pt_y,pt_x, 2] = 255 if int((v/v_max)*255.) > 255 else int((v/v_max)*255.)
+
+
+          bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+          cv2.putText(bgr, name, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+
+          if 'save_img' in kwargs:
+               cv2.imwrite(name, bgr)
+          if 'show_img' in kwargs:
+               cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
+               cv2.imshow('Image',bgr)
+               cv2.waitKey(0)
+               cv2.destroyAllWindows()
+
+
+
+
      def draw_grid_img(self, scale):
           """Draw grid image. A scale value can be passed to amplify the displacement field"""
           name = self.prepare_saved_file('grid', 'png')
@@ -111,19 +157,19 @@ for digital image correlation"""
 
      def write_result(self):
           """write a raw csv result file. Indeed, you can use your favorite tool to post-treat this file"""
-          name = self.prepare_saved_file('result', 'dat')
+          name = self.prepare_saved_file('result', 'csv')
           f = open(name, 'w')
-          f.write("index" + '\t' + "index_x" + '\t' + "index_y" + '\t' + "pos_x"    + '\t' + "pos_y"    + '\t' + 
-                  "disp_x"    + '\t' + "disp_y"    + '\t' + 
-                  "strain_xx" + '\t' + "strain_yy" + '\t' + "strain_xy" + '\n')
+          f.write("index" + ',' + "index_x" + ',' + "index_y" + ',' + "pos_x"    + ',' + "pos_y"    + ',' + 
+                  "disp_x"    + ',' + "disp_y"    + ',' + 
+                  "strain_xx" + ',' + "strain_yy" + ',' + "strain_xy" + '\n')
           index = 0
           for i in range(self.size_x):
             for j in range(self.size_y):
-                 f.write(str(index)                                                 + '\t' +
-                         str(i)                   + '\t' + str(j)                   + '\t' + 
-                         str(self.grid_x[i,j])    + '\t' + str(self.grid_y[i,j])    + '\t' + 
-                         str(self.disp_x[i,j])    + '\t' + str(self.disp_y[i,j])    + '\t' + 
-                         str(self.strain_xx[i,j]) + '\t' + str(self.strain_yy[i,j]) + '\t' + str(self.strain_xy[i,j]) + '\n')
+                 f.write(str(index)                                                 + ',' +
+                         str(i)                   + ',' + str(j)                   + ',' + 
+                         str(self.grid_x[i,j])    + ',' + str(self.grid_y[i,j])    + ',' + 
+                         str(self.disp_x[i,j])    + ',' + str(self.disp_y[i,j])    + ',' + 
+                         str(self.strain_xx[i,j]) + ',' + str(self.strain_yy[i,j]) + ',' + str(self.strain_xy[i,j]) + '\n')
                  index = index + 1
           f.close()
 
@@ -143,7 +189,7 @@ for digital image correlation"""
           dy = np.array([d[1] for d in disp])
           method = 'linear' if not 'method' in kwargs else kwargs['method']
 
-          print 'interpolate displcament with', method, 'method'
+          print 'interpolate displacement with', method, 'method'
           if method=='delaunay':
                from scipy.interpolate import LinearNDInterpolator
                inter_x = LinearNDInterpolator(point, dx)
@@ -173,7 +219,7 @@ for digital image correlation"""
                
                tck_y = scipy.interpolate.bisplrep(self.grid_x, self.grid_y, dy, kx=5, ky=5)
                self.disp_y = scipy.interpolate.bisplev(self.grid_x[:,0], self.grid_y[0,:],tck_y)
-
+               
           else:
                self.disp_x = griddata((x, y), dx, (self.grid_x, self.grid_y), method=method)
                self.disp_y = griddata((x, y), dy, (self.grid_x, self.grid_y), method=method)
@@ -355,7 +401,7 @@ sequence of images. The displacements are computed and a result file is written
      img_list = sorted(glob.glob(image_pattern))
      assert len(img_list) > 1, "there is not image in " + str(image_pattern)
      img_ref = cv2.imread(img_list[0], 0)
-
+     
      # choose area of interset 
      if (area_of_intersest is None):
           print "please pick your area of intersest on the picture"
@@ -363,28 +409,39 @@ sequence of images. The displacements are computed and a result file is written
 
      # init correlation grid
      area     = area_of_intersest
+
      points   = []
      points_x = np.float64(np.arange(area[0][0], area[1][0], grid_size_px[0]))
      points_y = np.float64(np.arange(area[0][1], area[1][1], grid_size_px[1]))
 
-     if not 'unstructured_grid' in kwargs: 
-          for x in points_x:
-               for y in points_y:
-                    points.append(np.array([np.float32(x),np.float32(y)]))
-          points = np.array(points)
-     else:
+     if 'unstructured_grid' in kwargs:
           block_size, min_dist = kwargs['unstructured_grid']
           feature_params = dict( maxCorners = 50000,
                                  qualityLevel = 0.01,
                                  minDistance = min_dist,
                                  blockSize = block_size)
           points = cv2.goodFeaturesToTrack(img_ref, mask = None, **feature_params)[:,0]
+     elif 'deep_flow' in kwargs:
+          points_x = np.float64(np.arange(area[0][0], area[1][0], 1))
+          points_y = np.float64(np.arange(area[0][1], area[1][1], 1))
+          for x in points_x:
+               for y in points_y:
+                    points.append(np.array([np.float32(x),np.float32(y)]))
+          points = np.array(points)
+     else: 
+          for x in points_x:
+               for y in points_y:
+                    points.append(np.array([np.float32(x),np.float32(y)]))
+          points = np.array(points)
 
 
      # ok, display
      points_in = remove_point_outside(points, area, shape='box')
+
+     
      img_ref = cv2.imread(img_list[0], 0)
      cv2.putText(img_ref, "Displaying markers... Press any buttons to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+
      draw_opencv(img_ref, point=points_in)
 
      # compute grid and save it in result file
@@ -405,12 +462,34 @@ sequence of images. The displacements are computed and a result file is written
           print 'reading image {} / {} : "{}"'.format(i+1, len(img_list), img_list[i+1])
           image_ref = cv2.imread(img_list[i], 0)
           image_str = cv2.imread(img_list[i+1], 0)
-          final_point, st, err = cv2.calcOpticalFlowPyrLK(image_ref, image_str, point_to_process, None, **lk_params)
-          #draw_opencv(image_ref, point=points_in, pointf=final_point, l_color=(0,255,0), p_color=(0,255,0))
-          point_to_process = final_point
+          
+          if 'deep_flow' in kwargs:
+               winsize_x = win_size_px[0]
+               final_point = cv2.calcOpticalFlowFarneback(image_ref, image_str, None, 0.5, 3, winsize_x,
+                                                          10, 5, 1.2, 0)
+               # prev, next, flow, pyr_scale, levels, winsize, iterations,poly_n, poly_sigma
+               index = 0
+               ii_max = final_point.shape[0]
+               jj_max = final_point.shape[1]
+
+               for jj in range(jj_max):
+                   for ii in range(ii_max):
+                      #area     = [(0,0),(img_ref.shape[1],img_ref.shape[0])]
+                      if (jj >= area[0][0] and jj < area[1][0] and
+                          ii >= area[0][1] and ii < area[1][1]):
+                          point_to_process[index] += final_point[ii,jj]
+                          index += 1
+
+               
+          else:
+               final_point, st, err = cv2.calcOpticalFlowPyrLK(image_ref, image_str, point_to_process, None, **lk_params)               
+               #draw_opencv(image_ref, point=points_in, pointf=final_point, l_color=(0,255,0), p_color=(0,255,0))
+               point_to_process = final_point
           write_result(f, img_list[i+1], point_to_process)
      f.write('\n')
      f.close()
+
+
      
 
 
@@ -508,6 +587,8 @@ These results are :
                mygrid.draw_marker_img()
                mygrid.draw_disp_img(scale_disp)
                mygrid.draw_grid_img(scale_grid)
+               if win_size_x == 1 and win_size_y == 1 : 
+                    mygrid.draw_disp_hsv_img()
 
           # write result file
           mygrid.write_result()
