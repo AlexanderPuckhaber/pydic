@@ -137,7 +137,7 @@ for digital image correlation"""
 
 
           bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-          cv2.putText(bgr, name, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+          bgr = cv2.putText(bgr, name, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
 
           if 'save_img' in kwargs:
                cv2.imwrite(name, bgr)
@@ -316,7 +316,7 @@ def draw_opencv(image, *args, **kwargs):
 
     if 'text' in kwargs:
          text = kwargs['text']
-         cv2.putText(image, text, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+         image = cv2.putText(image, text, (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
 
          
     frame = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
@@ -440,7 +440,7 @@ sequence of images. The displacements are computed and a result file is written
 
      
      img_ref = cv2.imread(img_list[0], 0)
-     cv2.putText(img_ref, "Displaying markers... Press any buttons to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+     img_ref = cv2.putText(img_ref, "Displaying markers... Press any buttons to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
 
      draw_opencv(img_ref, point=points_in)
 
@@ -619,7 +619,7 @@ cropping = False
 
 def pick_area_of_interest(image):
     global area, cropping
-    cv2.putText(image, "Pick the area of interest (left click + move mouse) and press 'c' button to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+    image = cv2.putText(image, "Pick the area of interest (left click + move mouse) and press 'c' button to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
         
     def click_and_crop(event, x, y, flags, param):
         global area, cropping
