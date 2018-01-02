@@ -632,7 +632,7 @@ def pick_area_of_interest(image):
             cropping = False
  
             # draw a rectangle around the region of interest
-            cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
+            image = cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
             cv2.imshow("image", image)
 
     clone = image.copy()
