@@ -118,8 +118,8 @@ max_strain_xx = np.array([grid.average(grid.strain_xx, x_range, y_range) for gri
 E, intercept, r_value, p_value, std_err = stats.linregress(max_strain_xx, max_stress)
 
 # and print results !
-print "\nThe computed elastic constants is :" 
-print "  => Young's modulus E={:.2f} GPa".format(E*1e-9)
+print ("\nThe computed elastic constants is :") 
+print ("  => Young's modulus E={:.2f} GPa".format(E*1e-9))
 
 
 # enjoy !

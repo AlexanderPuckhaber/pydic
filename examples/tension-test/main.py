@@ -103,8 +103,11 @@ stress = force/(sample_width * sample_thickness)
 
 # now extract the main average strains on xx and yy
 # - first, we need to reduce the interest zone where the average values are computed
-x_range = range(pydic.grid_list[0].size_x/4, 3*pydic.grid_list[0].size_x/4) 
-y_range = range(pydic.grid_list[0].size_y/4, 3*pydic.grid_list[0].size_y/4)
+
+test = pydic.grid_list[0].size_x/4
+
+x_range = range(int(pydic.grid_list[0].size_x/4), int(3*pydic.grid_list[0].size_x/4)) 
+y_range = range(int(pydic.grid_list[0].size_y/4), int(3*pydic.grid_list[0].size_y/4))
 # - use grid.average method to compute the average values of the xx and yy strains
 ave_strain_xx = np.array([grid.average(grid.strain_xx, x_range, y_range) for grid in pydic.grid_list])
 ave_strain_yy = np.array([grid.average(grid.strain_yy, x_range, y_range) for grid in pydic.grid_list])
@@ -119,9 +122,9 @@ Nu, intercept, r_value, p_value, std_err = stats.linregress(ave_strain_xx, -ave_
 
 
 # and print results !
-print "\nThe computed elastic constants are :" 
-print "  => Young's modulus E={:.2f} GPa".format(E*1e-9)
-print "  => Poisson's ratio Nu={:.2f}".format(Nu)
+print ("\nThe computed elastic constants are :")
+print ("  => Young's modulus E={:.2f} GPa".format(E*1e-9))
+print ("  => Poisson's ratio Nu={:.2f}".format(Nu))
 
 
 

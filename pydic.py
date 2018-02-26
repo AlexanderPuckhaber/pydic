@@ -91,7 +91,7 @@ for digital image correlation"""
           if not os.path.exists(folder):os.makedirs(folder)
           base = os.path.basename(self.image)
           name = folder + '/' + os.path.splitext(base)[0] + '_' + prefix + '.' + extension
-          print "saving", name, "file..."
+          print("saving", name, "file...")
           return name
 
      def draw_marker_img(self):
@@ -189,7 +189,7 @@ for digital image correlation"""
           dy = np.array([d[1] for d in disp])
           method = 'linear' if not 'method' in kwargs else kwargs['method']
 
-          print 'interpolate displacement with', method, 'method'
+          print('interpolate displacement with', method, 'method')
           if method=='delaunay':
                from scipy.interpolate import LinearNDInterpolator
                inter_x = LinearNDInterpolator(point, dx)
@@ -404,7 +404,7 @@ sequence of images. The displacements are computed and a result file is written
      
      # choose area of interset 
      if (area_of_intersest is None):
-          print "please pick your area of intersest on the picture"
+          print("please pick your area of intersest on the picture")
           area_of_intersest = pick_area_of_interest(img_ref)
 
      # init correlation grid
@@ -459,7 +459,7 @@ sequence of images. The displacements are computed and a result file is written
      point_to_process = points_in
      write_result(f, img_list[0], point_to_process)
      for i in range(len(img_list)-1):
-          print 'reading image {} / {} : "{}"'.format(i+1, len(img_list), img_list[i+1])
+          print('reading image {} / {} : "{}"'.format(i+1, len(img_list), img_list[i+1]))
           image_ref = cv2.imread(img_list[i], 0)
           image_str = cv2.imread(img_list[i+1], 0)
           
@@ -531,7 +531,7 @@ These results are :
      # read meta info file
      meta_info = {}
      if 'meta_info_file' in kwargs:
-          print 'read meta info file', kwargs['meta_info_file'], '...'
+          print('read meta info file', kwargs['meta_info_file'], '...')
           with open(kwargs['meta_info_file']) as f:
                lines = f.readlines()
                header = lines[0]
@@ -574,7 +574,7 @@ These results are :
                
      # compute displacement and strain
      for i, mygrid in enumerate(grid_list):
-          print "\ncompute displacement and strain field of", image_list[i], "..."
+          print("\ncompute displacement and strain field of", image_list[i], "...")
           disp = compute_disp_and_remove_rigid_transform(point_list[i], point_list[0])
           mygrid.add_raw_data(win_size, image_list[0], image_list[i], point_list[0], point_list[i], disp)
           
@@ -596,11 +596,12 @@ These results are :
           # add meta info to grid if it exists
           if (len(meta_info) > 0):
                img = os.path.basename(mygrid.image)
-               if not meta_info.has_key(img):
-                    print "warning, can't affect meta deta for image", img
+               #if not meta_info.has_key(img):
+               if img not in meta_info.keys():
+                    print("warning, can't affect meta deta for image", img)
                else:
                     mygrid.add_meta_info(meta_info.get(img))
-                    print 'add meta info', meta_info.get(img)
+                    print('add meta info', meta_info.get(img))
                     
                
 
@@ -617,23 +618,23 @@ def compute_displacement(point, pointf):
 area = []
 cropping = False
 
-def pick_area_of_interest(image):
+def pick_area_of_interest(PreliminaryImage):
     global area, cropping
-    image = cv2.putText(image, "Pick the area of interest (left click + move mouse) and press 'c' button to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
+    image = cv2.putText(PreliminaryImage, "Pick the area of interest (left click + move mouse) and press 'c' button to continue", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),4)
         
     def click_and_crop(event, x, y, flags, param):
         global area, cropping
-	if event == cv2.EVENT_LBUTTONDOWN:
+        if event == cv2.EVENT_LBUTTONDOWN:
             area = [(x, y)]
             cropping = True
  
-	elif event == cv2.EVENT_LBUTTONUP:
+        elif event == cv2.EVENT_LBUTTONUP:
             area.append((x, y))
             cropping = False
  
             # draw a rectangle around the region of interest
-            image = cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
-            cv2.imshow("image", image)
+            Newimage = cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
+            cv2.imshow("image", Newimage)
 
     clone = image.copy()
     cv2.namedWindow("image", cv2.WINDOW_NORMAL)
@@ -641,7 +642,7 @@ def pick_area_of_interest(image):
  
     # keep looping until the 'c' key is pressed
     while True:
-	# display the image and wait for a keypress
+        # display the image and wait for a keypress
         cv2.imshow("image", image)
         key = cv2.waitKey(1) & 0xFF
  
@@ -699,7 +700,7 @@ def compute_disp_and_remove_rigid_transform(p1, p2):
 
      # special reflection case
      if np.linalg.det(R) < 0:
-          print "Reflection detected"
+          print("Reflection detected")
           Vt[2,:] *= -1
           R = Vt.T * U.T
 
