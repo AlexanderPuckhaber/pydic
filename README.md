@@ -22,14 +22,25 @@ image correlation and let automatic choosing best points for DIC thanks to algor
 [scipy](https://www.scipy.org/) and [opencv2](http://opencv.org/). You have to install
 these libraries to use *pydic*. Generally, [matplotlib](https://matplotlib.org/), [numpy](http://www.numpy.org/), 
 and [scipy](https://www.scipy.org/) are embedded in the main python packages 
-such as [python(x,y)](https://python-xy.github.io/) or available in the standard package 
-repositories of the main GNU/Linux distributions. 
+or available in the standard package repositories of the main GNU/Linux distributions. 
 
 The [opencv2](http://opencv.org/) library is a powerful library for image processing with python bindings. 
 The DIC processings are managed by this library. Probably, you need to compile manually 
 the [opencv2](http://opencv.org/) library. The installation and compilation procedure of opencv2 are 
 detailed in the [official tutorial page about opencv2](http://docs.opencv.org/2.4/doc/tutorials/introduction/table_of_content_introduction/table_of_content_introduction.html#table-of-content-introduction). Once you have done this work, you can 
 download the *pydic* package and go to the `examples` directory to run the *tensile test* or the *four point bending test* examples.
+
+# Required versions
+Pydic currently uses :
+ - Python 3
+ - opencv module version `3.4.0`
+ - matplotlib module version `1.5.1`
+ - numpy module version `1.14.1`
+ - scipy module version `0.17.0`
+
+* You can not use Pydic with Python 2*. 
+If your python package does not match these module versions, 
+you may encounter some troubles... or not ! :)
 
 
 # Running the four point bending test example
