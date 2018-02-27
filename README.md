@@ -39,6 +39,7 @@ Pydic currently uses :
  - scipy module version `0.17.0`
 
 _Be aware, you can't use Pydic with Python 2_ !
+
 If your python package does not match these module versions, 
 you may encounter some troubles... or not ! :)
 
