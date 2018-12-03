@@ -142,8 +142,9 @@ for digital image correlation"""
           if 'save_img' in kwargs:
                cv2.imwrite(name, bgr)
           if 'show_img' in kwargs:
-               cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
-               cv2.imshow('Image',bgr)
+               cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+               cv2.resizeWindow('image', bgr.shape[1], bgr.shape[0])
+               cv2.imshow('image', bgr)
                cv2.waitKey(0)
                cv2.destroyAllWindows()
 
@@ -372,8 +373,9 @@ def draw_opencv(image, *args, **kwargs):
          cv2.imwrite( kwargs['filename'], frame)
          return
 
-    cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
-    cv2.imshow('Image',frame)
+    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('image', frame.shape[1], frame.shape[0])
+    cv2.imshow('image',frame)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     
@@ -634,10 +636,12 @@ def pick_area_of_interest(PreliminaryImage):
  
             # draw a rectangle around the region of interest
             Newimage = cv2.rectangle(image, area[0], area[1], (0, 255, 0), 2)
-            cv2.imshow("image", Newimage)
+            cv2.imshow('image', Newimage)
+            
 
     clone = image.copy()
-    cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('image', image.shape[1], image.shape[0])
     cv2.setMouseCallback("image", click_and_crop)
  
     # keep looping until the 'c' key is pressed
