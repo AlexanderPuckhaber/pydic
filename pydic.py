@@ -21,7 +21,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+# Contributors : Ronan GARO (debugging + log strain), Laurent MAHEO (debugging + log strain)
 
 # ====== INTRODUCTION
 # Welcome to pydic a free python suite for digital image correlation.
@@ -259,19 +259,59 @@ for digital image correlation"""
                  du_dy = 0.
                  dv_dx = 0.
 
+                 if i-1 >=0 and i+1< self.size_x:
+                      du1 = (self.disp_x[i+1,j] - self.disp_x[i-1,j])/2.
+                      du_dx = du1/dx
+                      dv2 = (self.disp_y[i+1,j] - self.disp_y[i-1,j])/2.
+                      dv_dx = dv2/dx
+
+                 if j-1>=0 and j+1 < self.size_y:
+                      dv1 = (self.disp_y[i,j+1] - self.disp_y[i,j-1])/2.
+                      dv_dy = dv1/dx
+                      du2 = (self.disp_x[i,j+1] - self.disp_x[i,j-1])/2.
+                      du_dy = du2/dy
+
+                 self.strain_xx[i,j] = du_dx + .5*(du_dx**2 + dv_dx**2)
+                 self.strain_yy[i,j] = dv_dy + .5*(du_dy**2 + dv_dy**2)
+                 self.strain_xy[i,j] = .5*(du_dy + dv_dx + du_dx*du_dy + dv_dx*dv_dy)
+
+     def compute_strain_field_log(self):
+          """Compute strain field from displacement field for large strain (logarithmic strain)"""
+          self.strain_xx = self.disp_x.copy(); self.strain_xx.fill(np.NAN)
+          self.strain_xy = self.disp_x.copy(); self.strain_xy.fill(np.NAN)
+          self.strain_yy = self.disp_x.copy(); self.strain_yy.fill(np.NAN)
+          self.strain_yx = self.disp_x.copy(); self.strain_yx.fill(np.NAN)
+
+
+          dx = self.grid_x[1][0] - self.grid_x[0][0]
+          dy = self.grid_y[0][1] - self.grid_y[0][0]
+          for i in range(self.size_x):
+            for j in range(self.size_y):
+                 du_dx = 0.
+                 dv_dy = 0. 
+                 du_dy = 0.
+                 dv_dx = 0.
+
+
                  if i-1 >= 0 and i+1 < self.size_x:
-                      du = self.disp_x[i+1,j] - self.disp_x[i-1,j]
-                      du_dx = du/(2.*dx)
-                      du_dy = du/(2.*dy)
+                      du1 = (self.disp_x[i+1,j] - self.disp_x[i-1,j])/2.
+                      du_dx = du1/dx
+                      dv2 = (self.disp_y[i+1,j] - self.disp_y[i-1,j])/2.
+                      dv_dx = dv2/dx
                       
                  if j-1 >= 0 and j+1 < self.size_y:
-                      dv = self.disp_y[i,j+1] - self.disp_y[i,j-1]
-                      dv_dx = dv/(2.*dx)
-                      dv_dy = dv/(2.*dy)
+                      dv1 = (self.disp_y[i,j+1] - self.disp_y[i,j-1])/2.
+                      dv_dy = dv1/dx
+                      du2 = (self.disp_x[i,j+1] - self.disp_x[i,j-1])/2.
+                      du_dy = du2/dy
+                 t11=1+2.*du_dx+du_dx**2+dv_dx**2
+                 t22=1+2.*dv_dy+dv_dy**2+du_dy**2
+                 t12=du_dy+dv_dx+du_dx*du_dy+dv_dx*dv_dy
+                 deflog=np.log([[t11,t12],[t12,t22]])
 
-                 self.strain_xx[i,j] = du_dx + .5*(du_dx**2 + dv_dy**2)
-                 self.strain_yy[i,j] = dv_dy + .5*(du_dx**2 + dv_dy**2)
-                 self.strain_xy[i,j] = .5*(du_dy + dv_dx + du_dx*du_dy + dv_dx*dv_dy)
+                 self.strain_xx[i,j] = .5*deflog[0,0]
+                 self.strain_yy[i,j] = .5*deflog[1,1]
+                 self.strain_xy[i,j] = .5*deflog[0,1]
 
      def average(self, value, x_range, y_range):
           """Get the average value in the specified x,y range of the given field"""
@@ -523,12 +563,15 @@ These results are :
  - 'scale_grid' is the scale (a float) that allows to amplify the 'grid' images
  - 'meta_info_file' is the path to a meta info file. A meta info file is a simple csv file 
    that contains some additional data for each pictures such as time or load values.
+ - 'strain_type' should be 'cauchy' '2nd_order' or 'log'. Default value is cauchy (or engineering) strains. You 
+   can switch to log or 2nd order strain if you expect high strains. 
 """
      # treat optional args
-     interpolation = 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
-     save_image    = True if not 'save_image' in kwargs else kwargs['save_image']
-     scale_disp    = 4. if not 'scale_disp' in kwargs else float(kwargs['scale_disp'])
-     scale_grid    = 25. if not 'scale_grid' in kwargs else float(kwargs['scale_grid'])
+     interpolation= 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
+     save_image   = True if not 'save_image' in kwargs else kwargs['save_image']
+     scale_disp   = 4. if not 'scale_disp' in kwargs else float(kwargs['scale_disp'])
+     scale_grid   = 25. if not 'scale_grid' in kwargs else float(kwargs['scale_grid'])
+     strain_type  = 'cauchy' if not 'strain_type' in kwargs else kwargs['strain_type']
 
      # read meta info file
      meta_info = {}
@@ -576,13 +619,23 @@ These results are :
                
      # compute displacement and strain
      for i, mygrid in enumerate(grid_list):
-          print("\ncompute displacement and strain field of", image_list[i], "...")
+          print("compute displacement and strain field of", image_list[i], "...")
           disp = compute_disp_and_remove_rigid_transform(point_list[i], point_list[0])
           mygrid.add_raw_data(win_size, image_list[0], image_list[i], point_list[0], point_list[i], disp)
           
           disp_list.append(disp)
           mygrid.interpolate_displacement(point_list[0], disp, method=interpolation)
-          mygrid.compute_strain_field_DA()
+
+          if (strain_type == 'cauchy'):
+               mygrid.compute_strain_field()
+          elif (strain_type =='2nd_order'):
+               mygrid.compute_strain_field_DA()
+          elif (strain_type =='log'):
+               mygrid.compute_strain_field_log()
+          else:
+               print("please specify a correct strain_type : 'cauchy', '2nd_order' or 'log'")
+               print("exiting...")
+               sys.exit(0)
 
           # write image files
           if (save_image):

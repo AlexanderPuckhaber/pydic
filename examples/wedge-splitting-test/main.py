@@ -65,7 +65,7 @@ pydic.init('./img/essai*.BMP', correl_wind_size, correl_grid_size, "result.dic",
 
 # and read the result file for computing strain and displacement field from the result file
 # note that with the deep_flow DIC, it's better to not use any interpolation
-pydic.read_dic_file('result.dic', interpolation='raw', save_image=True, scale_disp=10, scale_grid=25)
+pydic.read_dic_file('result.dic', interpolation='raw', strain_type='cauchy', save_image=True, scale_disp=10, scale_grid=25)
 
 
 # now we display for each image the displacement field in a HSV format where :

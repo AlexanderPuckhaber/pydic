@@ -60,7 +60,7 @@ correl_grid_size = (20,20) # the size in pixel of the interval (dx,dy) of the co
 # read image series and write a separated result file 
 pydic.init('./img/*.bmp', correl_wind_size, correl_grid_size, "result.dic")
 # and read the result file for computing strain and displacement field from the result file 
-pydic.read_dic_file('result.dic', interpolation='spline', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
+pydic.read_dic_file('result.dic', interpolation='spline', strain_type='cauchy', save_image=True, scale_disp=10, scale_grid=25, meta_info_file='img/meta-data.txt')
 
 
 #  ====== OR RUN PYDIC TO COMPUTE DISPLACEMENT AND STRAIN FIELDS (WITH UNSTRUCTURED GRID OPTION)
