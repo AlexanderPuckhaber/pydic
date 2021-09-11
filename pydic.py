@@ -389,16 +389,16 @@ def draw_opencv(image, *args, **kwargs):
                      not math.isnan(gr.grid_y[i,j]) and
                      not math.isnan(gr.disp_x[i,j]) and  
                      not math.isnan(gr.disp_y[i,j])):
-                      x = int(gr.grid_x[i,j]) + int(gr.disp_x[i,j]*scale)
-                      y = int(gr.grid_y[i,j]) + int(gr.disp_y[i,j]*scale)
+                      x = int(gr.grid_x[i,j]) - int(gr.disp_x[i,j]*scale)
+                      y = int(gr.grid_y[i,j]) - int(gr.disp_y[i,j]*scale)
                       
                       if i < (gr.size_x-1):
                            if (not math.isnan(gr.grid_x[i+1,j]) and  
                                not math.isnan(gr.grid_y[i+1,j]) and
                                not math.isnan(gr.disp_x[i+1,j]) and  
                                not math.isnan(gr.disp_y[i+1,j])):
-                                x1 = int(gr.grid_x[i+1,j]) + int(gr.disp_x[i+1,j]*scale)
-                                y1 = int(gr.grid_y[i+1,j]) + int(gr.disp_y[i+1,j]*scale)
+                                x1 = int(gr.grid_x[i+1,j]) - int(gr.disp_x[i+1,j]*scale)
+                                y1 = int(gr.grid_y[i+1,j]) - int(gr.disp_y[i+1,j]*scale)
                                 frame = cv2.line(frame, (x, y), (x1, y1), gr_color, 2)
 
                       if j < (gr.size_y-1):
@@ -406,8 +406,8 @@ def draw_opencv(image, *args, **kwargs):
                                not math.isnan(gr.grid_y[i,j+1]) and
                                not math.isnan(gr.disp_x[i,j+1]) and  
                                not math.isnan(gr.disp_y[i,j+1])):
-                                x1 = int(gr.grid_x[i,j+1]) + int(gr.disp_x[i,j+1]*scale)
-                                y1 = int(gr.grid_y[i,j+1]) + int(gr.disp_y[i,j+1]*scale)
+                                x1 = int(gr.grid_x[i,j+1]) - int(gr.disp_x[i,j+1]*scale)
+                                y1 = int(gr.grid_y[i,j+1]) - int(gr.disp_y[i,j+1]*scale)
                                 frame = cv2.line(frame, (x, y), (x1, y1), gr_color, 4)
     if 'filename' in kwargs:
          cv2.imwrite( kwargs['filename'], frame)
@@ -620,7 +620,7 @@ These results are :
      # compute displacement and strain
      for i, mygrid in enumerate(grid_list):
           print("compute displacement and strain field of", image_list[i], "...")
-          disp = compute_disp_and_remove_rigid_transform(point_list[i], point_list[0])
+          disp = compute_displacement(point_list[i], point_list[0])
           mygrid.add_raw_data(win_size, image_list[0], image_list[i], point_list[0], point_list[i], disp)
           
           disp_list.append(disp)
