@@ -565,6 +565,7 @@ These results are :
    that contains some additional data for each pictures such as time or load values.
  - 'strain_type' should be 'cauchy' '2nd_order' or 'log'. Default value is cauchy (or engineering) strains. You 
    can switch to log or 2nd order strain if you expect high strains. 
+ - 'rm_rigid_body_transform' for removing rigid body displacement (default is true)
 """
      # treat optional args
      interpolation= 'raw' if not 'interpolation' in kwargs else kwargs['interpolation']
@@ -572,7 +573,8 @@ These results are :
      scale_disp   = 4. if not 'scale_disp' in kwargs else float(kwargs['scale_disp'])
      scale_grid   = 25. if not 'scale_grid' in kwargs else float(kwargs['scale_grid'])
      strain_type  = 'cauchy' if not 'strain_type' in kwargs else kwargs['strain_type']
-
+     rm_rigid_body_transform = True if not 'rm_rigid_body_transform' in kwargs else kwargs['rm_rigid_body_transform']
+     
      # read meta info file
      meta_info = {}
      if 'meta_info_file' in kwargs:
@@ -620,7 +622,13 @@ These results are :
      # compute displacement and strain
      for i, mygrid in enumerate(grid_list):
           print("compute displacement and strain field of", image_list[i], "...")
-          disp = compute_displacement(point_list[i], point_list[0])
+          disp = None
+          if rm_rigid_body_transform:
+               print("remove rigid body transform")
+               disp = compute_disp_and_remove_rigid_transform(point_list[i], point_list[0])
+          else:
+               print("do not remove rigid body transform")
+               disp = compute_displacement(point_list[i], point_list[0])
           mygrid.add_raw_data(win_size, image_list[0], image_list[i], point_list[0], point_list[i], disp)
           
           disp_list.append(disp)

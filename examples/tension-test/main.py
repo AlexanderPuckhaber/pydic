@@ -43,10 +43,10 @@ import numpy as np
 from scipy import stats
 import os
 import cv2
-
-# locate the pydic module and import it
-import imp
-pydic = imp.load_source('pydic', '../../pydic.py')
+# import pydic
+import sys
+sys.path.append('../../')
+import pydic
 
 
 

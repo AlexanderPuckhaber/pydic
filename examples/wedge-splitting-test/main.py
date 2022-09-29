@@ -46,10 +46,10 @@ from scipy.interpolate import Rbf
 import scipy.interpolate
 import copy
 import os
-
-# locate the pydic module and import it
-import imp
-pydic = imp.load_source('pydic', '../../pydic.py')
+# import pydic
+import sys
+sys.path.append('../../')
+import pydic
 
 
 
