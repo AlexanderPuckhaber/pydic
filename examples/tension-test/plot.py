@@ -10,6 +10,8 @@ from pathlib import Path
 plt.rcParams['figure.dpi'] = 300
 plt.rcParams['figure.figsize'] = (16, 9)
 
+# put your images in this folder, then run colin.py
+# the csvs will be generated
 img_folder = os.path.join("5 - Test1")
 
 csv_folder = os.path.join("5 - Test1", "pydic", "result")
