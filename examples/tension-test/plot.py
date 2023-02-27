@@ -44,16 +44,22 @@ def plot_result(csv_path, img_path, output_folder, suffix, strain_key, show_plot
         
         histogram_folder = os.path.join(output_folder, "histograms")
         scatterplot_folder = os.path.join(output_folder, "scatterplots")
+        no_overlay_folder = os.path.join(output_folder, "no_overlay")
         interpolation_nearest_folder = os.path.join(output_folder, "interpolation_nearest")
         interpolation_linear_folder = os.path.join(output_folder, "interpolation_linear")
 
         Path(histogram_folder).mkdir(exist_ok=True)
         Path(scatterplot_folder).mkdir(exist_ok=True)
+        Path(no_overlay_folder).mkdir(exist_ok=True)
         Path(interpolation_nearest_folder).mkdir(exist_ok=True)
         Path(interpolation_linear_folder).mkdir(exist_ok=True)
 
 
     img = PIL.Image.open(img_path, mode='r')
+    blank = np.ones_like(np.asarray(img.copy()))
+    blank = blank * 255
+    blank_img = PIL.Image.fromarray(blank)
+    
     df = pd.read_csv(csv_path)
 
     # drop rows with NaN (seems to be where markers are missed --> no markers for grid cell)
@@ -67,7 +73,7 @@ def plot_result(csv_path, img_path, output_folder, suffix, strain_key, show_plot
     # based on histogram and visual inspection, pick tightest range that shows most datapoints
     std = np.std(df[strain_key])
     mean = np.mean(df[strain_key].to_numpy())
-    clip_std = 3
+    clip_std = 2
     strain_min = mean - std*clip_std
     strain_max = mean + std*clip_std
 
@@ -126,13 +132,25 @@ def plot_result(csv_path, img_path, output_folder, suffix, strain_key, show_plot
         if save_plots:
             if method == 'nearest':
                 plt.savefig(os.path.join(interpolation_nearest_folder, "{}.png".format(suffix)))
+                plt.clf()
+                fig = plt.figure()
+
+                ax = plt.imshow(blank_img, cmap=plt.cm.binary)
+                plt.title("[{}] {} interpolation: {}".format(suffix, strain_key, method))
+                im = plt.pcolormesh(grid_x, grid_y, grid_z, cmap=plt.cm.rainbow,
+                                    vmax=strain_max, vmin=strain_min, alpha=0.5)
+                
+                cb = fig.colorbar(im)
+                plt.savefig(os.path.join(no_overlay_folder, "{}.png".format(suffix)))
             elif method == 'linear':
                 plt.savefig(os.path.join(interpolation_linear_folder, "{}.png".format(suffix)))
         if show_plots:
             plt.show()
         plt.clf()
 
-for strain_key in ["strain_xx", "strain_yy", "strain_xy"]:
+Path(output_base_folder).mkdir(exist_ok=True)
+
+for strain_key in ["strain_yy", "strain_xx", "strain_xy"]:
     output_folder = os.path.join(output_base_folder, strain_key)
     for i in range(1, len(suffix_list), 1):
         img_filename = img_filelist[i]
