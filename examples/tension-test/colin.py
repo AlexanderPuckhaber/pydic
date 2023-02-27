@@ -72,7 +72,8 @@ correl_grid_size = (5,5) # the size in pixel of the interval (dx,dy) of the corr
 # note that you can't use the 'spline' or the 'raw' interpolation with unstructured grids 
 # please uncomment the next lines if you want to use the unstructured grid options instead of the aligned grid
 
-
+# looks for images in this folder
+# windows users need to change the path smile
 pydic.init('./5 - Test1/*.png', correl_wind_size, correl_grid_size, "result.dic", unstructured_grid=(20,5))
 pydic.read_dic_file('result.dic', interpolation='cubic', save_image=True, scale_disp=1, scale_grid=1, meta_info_file='img/meta-data.txt', rm_rigid_body_transform=False)
 
